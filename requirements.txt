@@ -1,0 +1,4 @@
+flask_ngrok
+pyngrok==4.1.1
+opencv-python 
+matplotlib

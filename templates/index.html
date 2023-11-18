@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+
+    <style>
+        /* Style for thumbnails */
+        .thumbnail {
+            width: 100px; /* Set the width to 100px */
+            height: auto; /* Automatically adjust height to maintain aspect ratio */
+            margin: 5px; /* Add some margin for spacing */
+        }
+
+        /* Center the main image horizontally */
+        #mainImageContainer {
+            text-align: center;
+        }
+
+        /* Center the next and previous buttons */
+        #navigationButtons {
+            text-align: center;
+            margin-top: 10px; /* Add some margin above the buttons */
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Upload</h1>
+    
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="files[]" accept="image/*" multiple>
+        <input type="submit" value="Upload">
+    </form>
+
+    <div id="mainImageContainer">
+        <img src="{{ url_for('static', filename='uploads/' + current_image) }}" alt="Current Image" id="mainImage">
+    </div>
+
+    <div id="navigationButtons">
+        <button onclick="showPrevious()">Previous</button>
+        <button onclick="showNext()">Next</button>
+    </div>
+
+    <div>
+        <h2>Thumbnails</h2>
+        {% for image in uploaded_images %}
+            <img class="thumbnail" src="{{ url_for('static', filename='uploads/' + image) }}" alt="{{ image }}" onclick="showImage('{{ image }}')">
+        {% endfor %}
+    </div>
+
+    <script>
+        function showNext() {
+            window.location.href = "/next";
+        }
+
+        function showPrevious() {
+            window.location.href = "/previous";
+        }
+
+        function showImage(image) {
+            document.getElementById("mainImage").src = "/static/uploads/" + image;
+        }
+
+        function handleClick(event) {
+            var x = event.clientX;
+            var y = event.clientY;
+            
+            fetch("/bounding_box", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    coordinates: [x, y]
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display bounding box on the main image
+                var boundingBox = document.createElement("div");
+                boundingBox.style.position = "absolute";
+                boundingBox.style.left = data.x + "px";
+                boundingBox.style.top = data.y + "px";
+                boundingBox.style.width = data.width + "px";
+                boundingBox.style.height = data.height + "px";
+                boundingBox.style.border = "2px solid " + data.color;
+
+                document.getElementById("mainImage").parentElement.appendChild(boundingBox);
+            });
+        }
+
+        document.getElementById("mainImage").addEventListener("click", handleClick);
+    </script>
+</body>
+</html>
