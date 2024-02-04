@@ -46,8 +46,9 @@
     <div>
         <h2>Thumbnails</h2>
         {% for image_data in uploaded_images %}
-            <img class="thumbnail" src="{{ url_for('static', filename=image_data['filename']) }}" alt="{{ image_data['filename'] }}" onclick="showImage('{{ image_data['filename'] }}')">
+        <img class="thumbnail" src="{{ url_for('static', filename=image_data['filename']) }}" alt="{{ image_data['filename'] }}" onclick="showImage('{{ image_data['filename'] }}')">
         {% endfor %}
+    
     </div>
 
     <script>

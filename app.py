@@ -4,7 +4,7 @@ import os
 import random
 
 # Set the upload folder
-UPLOAD_FOLDER = './static/uploads'
+UPLOAD_FOLDER = 'static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
