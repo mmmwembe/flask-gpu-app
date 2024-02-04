@@ -4,13 +4,13 @@ import os
 import random
 
 # Set the upload folder
-UPLOAD_FOLDER = '/content/static/uploads'
+UPLOAD_FOLDER = 'static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # Create a Flask app
 app = Flask(__name__)
-run_with_ngrok(app)  # Start ngrok when the app is run
+#run_with_ngrok(app)  # Start ngrok when the app is run
 
 # Set the upload folder
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
