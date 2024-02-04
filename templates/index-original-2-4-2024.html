@@ -10,7 +10,7 @@
         /* Style for thumbnails */
         .thumbnail {
             width: 100px; /* Set the width to 100px */
-            height: 100px; /* Set the height to 100px */
+            height: auto; /* Automatically adjust height to maintain aspect ratio */
             margin: 5px; /* Add some margin for spacing */
         }
 
@@ -45,8 +45,8 @@
 
     <div>
         <h2>Thumbnails</h2>
-        {% for image_data in uploaded_images %}
-            <img class="thumbnail" src="{{ url_for('static', filename=image_data['filename']) }}" alt="{{ image_data['filename'] }}" onclick="showImage('{{ image_data['filename'] }}')">
+        {% for image in uploaded_images %}
+            <img class="thumbnail" src="{{ url_for('static', filename='uploads/' + image) }}" alt="{{ image }}" onclick="showImage('{{ image }}')">
         {% endfor %}
     </div>
 
@@ -78,6 +78,7 @@
             })
             .then(response => response.json())
             .then(data => {
+                // Display bounding box on the main image
                 var boundingBox = document.createElement("div");
                 boundingBox.style.position = "absolute";
                 boundingBox.style.left = data.x + "px";

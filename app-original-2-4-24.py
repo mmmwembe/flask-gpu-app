@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_ngrok import run_with_ngrok
 import os
@@ -23,28 +24,33 @@ current_image_index = 0  # Index to track the current image being displayed
 @app.route("/")
 def home():
     global current_image_index
-    images_data = [{'filename': filename, 'path': os.path.join(app.config['UPLOAD_FOLDER'], filename)} for filename in uploaded_images]
     current_image = uploaded_images[current_image_index]
     image_path = os.path.join(app.config['UPLOAD_FOLDER'], current_image)
-    return render_template("index.html", current_image=current_image, image_path=image_path, uploaded_images=images_data)
+    return render_template("index.html", current_image=current_image, image_path=image_path, uploaded_images=uploaded_images)
 
+# Define the route for handling file uploads
 # Define the route for handling file uploads
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
     if request.method == "POST":
+        # Check if the post request has the file part
         if 'files[]' not in request.files:
             return redirect(request.url)
 
         files = request.files.getlist('files[]')
 
+        # If the user does not select a file, t
         if not files:
             return redirect(request.url)
 
+        # Save the uploaded files
         for file in files:
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
 
+        # Redirect to the home page after successful file upload
         return redirect(url_for('home'))
 
+    # If the request method is GET, render the home page
     return render_template("index.html")
 
 # Define the route for showing the next image
