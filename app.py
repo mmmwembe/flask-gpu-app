@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from flask_ngrok import run_with_ngrok
+#from flask_ngrok import run_with_ngrok
 import os
 import random
 
 # Set the upload folder
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = '/static/uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
